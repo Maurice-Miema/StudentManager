@@ -1,39 +1,30 @@
 # Utiliser une image PHP officielle avec Apache
 FROM php:8.0-apache
 
-# Activer le module mod_rewrite pour gérer les routes dynamiques
+# Activer le module mod_rewrite pour les routes PHP
 RUN a2enmod rewrite
 
-# Définir le répertoire de travail
-WORKDIR /var/www/html
+# Copier le code source de ton projet dans le conteneur
+# Copier le dossier 'public' dans le répertoire Apache par défaut
+COPY ./public /var/www/html/
 
-# Copier tout le contenu du projet dans le conteneur
-COPY . /var/www/html/
+# Copier le fichier .htaccess dans le répertoire Apache par défaut
+COPY ./.htaccess /var/www/html/
 
-# Copier le fichier .htaccess à la racine du conteneur
-COPY ./.htaccess /var/www/html/.htaccess
+# Copier le fichier de configuration si nécessaire
+COPY ./config.php /var/www/html/
 
-# Copier le fichier config.php dans le répertoire public ou à un autre endroit si nécessaire
-COPY ./config.php /var/www/html/config.php
+# Copier le dossier 'App' dans le conteneur si nécessaire (par exemple pour les contrôleurs, modèles)
+COPY ./App /var/www/html/App
 
-# Copier le fichier .env dans le répertoire public ou à un autre endroit si nécessaire
-COPY ./.env /var/www/html/.env
+# Copier le dossier 'routes' dans le conteneur
+COPY ./routes /var/www/html/routes
 
-# Modifier la configuration Apache pour définir 'public/' comme racine
-RUN echo '<VirtualHost *:80>\n\
-    DocumentRoot /var/www/html/public\n\
-    <Directory /var/www/html/public>\n\
-        Options Indexes FollowSymLinks\n\
-        AllowOverride All\n\
-        Require all granted\n\
-    </Directory>\n\
-</VirtualHost>' > /etc/apache2/sites-available/000-default.conf
+# Modifier les permissions si nécessaire pour Apache
+RUN chown -R www-data:www-data /var/www/html/
 
-# Donner les permissions correctes pour Apache
-RUN chown -R www-data:www-data /var/www/html/ && chmod -R 755 /var/www/html/
-
-# Exposer le port 80 pour le serveur web
+# Exposer le port 80 (par défaut pour HTTP)
 EXPOSE 80
 
-# Démarrer Apache en mode premier plan
+# Démarrer Apache en premier plan
 CMD ["apache2-foreground"]
