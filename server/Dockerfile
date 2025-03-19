@@ -1,16 +1,19 @@
-# Utiliser une image PHP avec Apache
-FROM php:8.0-apache
+# Utiliser l'image PHP officielle comme image de base
+FROM php:8.1-apache
 
-# Activer le module rewrite d'Apache pour le PHP
-RUN a2enmod rewrite
+# Installer les extensions PHP nécessaires (par exemple MySQL, PDO)
+RUN docker-php-ext-install pdo pdo_mysql
 
-# Copier tous les fichiers du dossier `server` dans le dossier approprié sur le serveur Apache
-COPY ./server /var/www/html/
+# Copier tous les fichiers du dossier server vers /var/www/html dans le conteneur
+COPY . /var/www/html/
 
-# Définir les permissions du dossier pour Apache
-RUN chown -R www-data:www-data /var/www/html
+# Configurer le répertoire public comme racine du document Apache
+WORKDIR /var/www/html/public
 
-# Exposer le port 80 pour l'API
+# Configurer Apache pour rediriger vers le dossier public
+COPY .htaccess /var/www/html/.htaccess
+
+# Exposer le port 80
 EXPOSE 80
 
 # Démarrer Apache en mode foreground
