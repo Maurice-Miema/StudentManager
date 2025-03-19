@@ -4,7 +4,9 @@ FROM php:8.0-apache
 # Activer le module mod_rewrite pour les routes PHP
 RUN a2enmod rewrite
 
-# Copier le code source de ton projet dans le conteneur
+# Définir le répertoire de travail
+WORKDIR /var/www/html
+
 # Copier le dossier 'public' dans le répertoire Apache par défaut
 COPY ./public /var/www/html/
 
@@ -21,10 +23,10 @@ COPY ./App /var/www/html/App
 COPY ./routes /var/www/html/routes
 
 # Modifier les permissions si nécessaire pour Apache
-RUN chown -R www-data:www-data /var/www/html/
+RUN chown -R www-data:www-data /var/www/html/ && chmod -R 755 /var/www/html/
 
-# Exposer le port 80 (par défaut pour HTTP)
+# Exposer le port 80 pour le serveur web
 EXPOSE 80
 
-# Démarrer Apache en premier plan
+# Démarrer Apache en mode premier plan
 CMD ["apache2-foreground"]
