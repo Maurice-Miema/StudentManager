@@ -1,17 +1,17 @@
-# Utiliser une image PHP officielle avec Apache
+# Utiliser PHP 8.0 avec Apache
 FROM php:8.0-apache
 
-# Activer le module mod_rewrite pour les routes PHP
+# Activer le module mod_rewrite
 RUN a2enmod rewrite
 
-# Copier le code source de ton projet dans le conteneur
-COPY ./public /var/www/html/
+# Définir le dossier de travail
+WORKDIR /var/www/html
 
-# Modifier les permissions si nécessaire pour Apache
-RUN chown -R www-data:www-data /var/www/html
+# Copier tous les fichiers dans le conteneur
+COPY ./server /var/www/html/
 
-# Exposer le port 80 (par défaut pour HTTP)
-EXPOSE 80
+# Changer la racine du serveur Apache vers le dossier public
+RUN sed -i "s|/var/www/html|/var/www/html/public|g" /etc/apache2/sites-available/000-default.conf
 
-# Démarrer Apache en premier plan
+# Redémarrer Apache
 CMD ["apache2-foreground"]
