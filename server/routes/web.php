@@ -2,9 +2,10 @@
 // Importer les fichiers et récupérer les routes
 $studentRoutes = require __DIR__ . "/StudentRoutes.php";
 $authRoutes = require __DIR__ . "/auth/AuthRoute.php";
+$teacherRoads = require __DIR__ . "/TeacherRoads.php";
 
 // Fusionner toutes les routes
-$routes = array_merge($studentRoutes, $authRoutes);
+$routes = array_merge($studentRoutes, $authRoutes, $teacherRoads);
 
 // Fonction pour gérer les requêtes
 function handleRequest($uri, $method, $routes) {
