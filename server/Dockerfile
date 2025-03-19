@@ -10,10 +10,19 @@ WORKDIR /var/www/html
 # Copier tout le contenu du projet dans le conteneur
 COPY . /var/www/html/
 
+# Copier le fichier .htaccess à la racine du conteneur
+COPY ./.htaccess /var/www/html/.htaccess
+
+# Copier le fichier config.php dans le répertoire public ou à un autre endroit si nécessaire
+COPY ./config.php /var/www/html/config.php
+
+# Copier le fichier .env dans le répertoire public ou à un autre endroit si nécessaire
+COPY ./.env /var/www/html/.env
+
 # Modifier la configuration Apache pour définir 'public/' comme racine
 RUN echo '<VirtualHost *:80>\n\
     DocumentRoot /var/www/html/public\n\
-    <Directory /var/www/html/>\n\
+    <Directory /var/www/html/public>\n\
         Options Indexes FollowSymLinks\n\
         AllowOverride All\n\
         Require all granted\n\
