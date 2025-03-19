@@ -15,7 +15,7 @@
                 // Démarrer une transaction
                 $this->conn->beginTransaction();
 
-                // Hacher le mot de passe
+                // Hacher le mot de passe<
                 $hashed_password = password_hash($password, PASSWORD_BCRYPT);
 
                 // Insérer l'étudiant
