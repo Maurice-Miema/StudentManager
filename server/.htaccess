@@ -1,44 +1,6 @@
-# Activer la réécriture d'URL
 RewriteEngine On
-
-# Forcer l'utilisation de HTTPS (si ton serveur est configuré avec SSL)
-RewriteCond %{HTTPS} off
-RewriteRule ^ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
-
-# Réécriture des URL pour que toutes les requêtes passent par index.php
+RewriteBase /
+RewriteRule ^index\.php$ - [L]
 RewriteCond %{REQUEST_FILENAME} !-f
 RewriteCond %{REQUEST_FILENAME} !-d
-RewriteRule ^(.*)$ /index.php [QSA,L]
-
-# Empêcher l'accès direct aux fichiers .htaccess et autres fichiers sensibles
-<Files .htaccess>
-    Order Allow,Deny
-    Deny from all
-</Files>
-
-# Désactiver l'indexation des répertoires
-Options -Indexes
-
-# Spécifier les types MIME (utile pour certaines configurations)
-AddType application/json .json
-AddType application/javascript .js
-AddType text/css .css
-
-# Configuration de la gestion du cache (exemple pour les fichiers statiques)
-<IfModule mod_expires.c>
-    ExpiresActive On
-    ExpiresDefault "access plus 1 year"
-    ExpiresByType text/html "access plus 0 seconds"
-    ExpiresByType text/css "access plus 1 week"
-    ExpiresByType application/javascript "access plus 1 week"
-    ExpiresByType image/png "access plus 1 year"
-    ExpiresByType image/jpeg "access plus 1 year"
-    ExpiresByType image/gif "access plus 1 year"
-</IfModule>
-
-# Configurations supplémentaires (si nécessaire)
-<IfModule mod_headers.c>
-    # Empêcher la mise en cache des réponses pour les fichiers PHP
-    Header set Cache-Control "no-store, no-cache, must-revalidate"
-    Header set Pragma "no-cache"
-</IfModule>
+RewriteRule . /index.php [L]
