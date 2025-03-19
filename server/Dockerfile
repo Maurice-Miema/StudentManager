@@ -1,20 +1,17 @@
-# Utiliser une image PHP avec Apache
+# Utiliser une image PHP officielle avec Apache
 FROM php:8.0-apache
 
-# Activer le module mod_rewrite pour la gestion des routes
+# Activer le module mod_rewrite pour les routes PHP
 RUN a2enmod rewrite
 
-# Copier tout le projet dans /var/www/html/
+# Copier tout le projet dans le dossier Apache
 COPY . /var/www/html/
 
-# Vérifier que le fichier .env existe bien (débogage)
-RUN ls -la /var/www/html/
+# Copier le fichier .env (même s'il est ignoré par Git)
+COPY .env /var/www/html/.env
 
-# Modifier le DocumentRoot pour qu'Apache utilise 'public/'
+# Modifier le DocumentRoot pour pointer vers le dossier 'public'
 RUN sed -i 's|DocumentRoot /var/www/html|DocumentRoot /var/www/html/public|' /etc/apache2/sites-available/000-default.conf
-
-# Vérifier si le fichier .env est bien copié
-RUN if [ ! -f /var/www/html/.env ]; then echo ".env est manquant !"; exit 1; fi
 
 # Modifier les permissions pour Apache
 RUN chown -R www-data:www-data /var/www/html/
