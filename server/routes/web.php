@@ -3,9 +3,13 @@
 $studentRoutes = require __DIR__ . "/StudentRoutes.php";
 $authRoutes = require __DIR__ . "/auth/AuthRoute.php";
 $teacherRoads = require __DIR__ . "/TeacherRoads.php";
+$noteRoads = require __DIR__ . "/NoteRoads.php";
+$coursRoads = require __DIR__ . "/CoursRoads.php";
+$groupeRoads = require __DIR__ . "/GroupeRoads.php";
+
 
 // Fusionner toutes les routes
-$routes = array_merge($studentRoutes, $authRoutes, $teacherRoads);
+$routes = array_merge($studentRoutes, $authRoutes, $teacherRoads, $noteRoads, $coursRoads, $groupeRoads);
 
 // Fonction pour gérer les requêtes
 function handleRequest($uri, $method, $routes) {
