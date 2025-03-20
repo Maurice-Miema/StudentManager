@@ -18,7 +18,7 @@
                 // Hacher le mot de passe
                 $hashed_password = password_hash($password, PASSWORD_BCRYPT);
 
-                // Insérer l'étudiant
+                // Insérer le professeur
                 $query = "INSERT INTO " . $this->table . "(nom, post_nom, matricule, mot_de_passe, role) VALUES (:nom, :postnom, :matricule, :password, :role)";
                 $stmt = $this->conn->prepare($query);
                 $stmt->bindParam(":nom", $nom);
@@ -31,10 +31,10 @@
                     throw new Exception("Échec de l'insertion de l'enseignat.");
                 }
 
-                // Récupérer l'ID de l'étudiant ajouté
+                // Récupérer l'ID du professeur ajouté
                 $id_professeur = $this->conn->lastInsertId();
 
-                // Insérer la promotion et l'année académique
+                // Insérer dans la table professeur
                 $query_promotion = "INSERT INTO professeur (id_utilisateur, grade) VALUES (:id_utilisateur, :grade)";
                 $stmt_promotion = $this->conn->prepare($query_promotion);
                 $stmt_promotion->bindParam(":id_utilisateur", $id_professeur);
