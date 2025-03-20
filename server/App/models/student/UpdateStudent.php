@@ -30,13 +30,14 @@
 
                 // Mise à jour des informations dans la table utilisateur
                 $query_utilisateur = "UPDATE " . $this->table_utilisateur . " 
-                                    SET nom = :nom, post_nom = :postnom, matricule = :matricule 
+                                    SET nom = :nom, post_nom = :postnom, matricule = :matricule
                                     WHERE id_utilisateur = :id_etudiant";
                 $stmt_utilisateur = $this->conn->prepare($query_utilisateur);
                 $stmt_utilisateur->bindParam(":nom", $nom);
                 $stmt_utilisateur->bindParam(":postnom", $postnom);
                 $stmt_utilisateur->bindParam(":matricule", $matricule);
                 $stmt_utilisateur->bindParam(":id_etudiant", $id_etudiant);
+                
 
                 if (!$stmt_utilisateur->execute()) {
                     throw new Exception("Échec de la mise à jour des informations de l'étudiant dans la table utilisateur.");
