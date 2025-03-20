@@ -2,6 +2,7 @@
 require_once __DIR__ . "/../App/controllers/student/AddStudentController.php";
 require_once __DIR__ . "/../App/controllers/student/UpdateStudentController.php";
 require_once __DIR__ . "/../App/controllers/student/DeleteStudentController.php";
+require_once __DIR__ . "/../App/controllers/student/StudentGroupController.php";
 
 // Retourner les routes au lieu de les exécuter immédiatement
 return [
@@ -23,6 +24,13 @@ return [
         "DELETE" => function() {
             $controllerDelete = new DeleteStudentController();
             $controllerDelete->delete();
+            exit;
+        }
+    ],
+    "/student-group" => [
+        "POST" => function() {
+            $controller = new StudentGroupeController();
+            $controller->studentgroupecontroller();
             exit;
         }
     ]
