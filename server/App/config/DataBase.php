@@ -1,27 +1,16 @@
 <?php
-    require_once __DIR__ . "/../../config.php"; 
-
-    loadEnv(__DIR__ . "/../../.env"); 
-
     class Database {
-        private $host;
-        private $db_name;
-        private $username;
-        private $password;
-        private $port;
+        private $host = 'mainline.proxy.rlwy.net';    
+        private $db_name = 'railway'; 
+        private $username = 'root';  
+        private $password = 'vKYMGeTzSMecHxEBLhelmUDFoApfjqRU';
+        private $port = '11295';
         public $conn;
-
-        public function __construct() {
-            $this->host = $_ENV['DB_HOST'];
-            $this->db_name = $_ENV['DB_NAME'];
-            $this->username = $_ENV['DB_USER'];
-            $this->password = $_ENV['DB_PASS'];
-            $this->port = $_ENV['DB_PORT'];
-        }
 
         public function getConnection() {
             $this->conn = null;
             try {
+                // DSN de connexion à la base de données
                 $dsn = "mysql:host=" . $this->host . ";port=" . $this->port . ";dbname=" . $this->db_name . ";charset=utf8mb4";
                 $this->conn = new PDO($dsn, $this->username, $this->password, [
                     PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
