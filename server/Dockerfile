@@ -4,6 +4,9 @@ FROM php:8.0-apache
 # Activer le module mod_rewrite pour la gestion des routes
 RUN a2enmod rewrite
 
+# Installer PDO MySQL
+RUN docker-php-ext-install pdo pdo_mysql && docker-php-ext-enable pdo_mysql
+
 # Copier tout le projet dans /var/www/html/
 COPY . /var/www/html/
 

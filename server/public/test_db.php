@@ -4,6 +4,8 @@
     ini_set('display_startup_errors', 1);
     error_reporting(E_ALL);
 
+    phpinfo();
+
     // Vérifier le bon chemin du fichier DataBase.php
     $databaseFile = realpath(__DIR__ . "/../App/config/DataBase.php");
 
