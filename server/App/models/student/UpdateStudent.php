@@ -12,7 +12,7 @@
         }
 
         // Méthode pour mettre à jour les informations de l'étudiant
-        public function updateStudent($id_etudiant, $nom, $postnom, $matricule, $promotion, $annee_academique) {
+        public function updateStudent($id_etudiant, $nom, $postnom, $prenom, $email, $matricule, $promotion, $annee_academique) {
             try {
                 // Vérifier si l'ID de l'étudiant existe dans la table utilisateur
                 $query_check_id = "SELECT id_utilisateur FROM " . $this->table_utilisateur . " WHERE id_utilisateur = :id_etudiant";
@@ -30,11 +30,13 @@
 
                 // Mise à jour des informations dans la table utilisateur
                 $query_utilisateur = "UPDATE " . $this->table_utilisateur . " 
-                                    SET nom = :nom, post_nom = :postnom, matricule = :matricule 
+                                    SET nom = :nom, post_nom = :postnom, prenom = :prenom, email = :email, matricule = :matricule 
                                     WHERE id_utilisateur = :id_etudiant";
                 $stmt_utilisateur = $this->conn->prepare($query_utilisateur);
                 $stmt_utilisateur->bindParam(":nom", $nom);
                 $stmt_utilisateur->bindParam(":postnom", $postnom);
+                $stmt_utilisateur->bindParam(":prenom", $prenom);
+                $stmt_utilisateur->bindParam(":email", $email);
                 $stmt_utilisateur->bindParam(":matricule", $matricule);
                 $stmt_utilisateur->bindParam(":id_etudiant", $id_etudiant);
 

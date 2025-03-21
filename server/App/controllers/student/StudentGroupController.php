@@ -1,8 +1,10 @@
 <?php
     require_once __DIR__ . "/../../models/student/StudentGroup.php";
+    require_once __DIR__ . "/../../middleware/AuthMiddleware.php";
 
     class StudentGroupeController {
         public function studentgroupecontroller(){
+            $user = AuthMiddleware::verifyToken();
             if ($_SERVER["REQUEST_METHOD"] === "POST") {
                 $data = json_decode(file_get_contents("php://input"), true);
 

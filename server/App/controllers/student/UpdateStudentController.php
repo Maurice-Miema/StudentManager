@@ -1,13 +1,15 @@
 <?php
     require_once __DIR__ . "/../../models/student/UpdateStudent.php";
+    require_once __DIR__ . "/../../middleware/AuthMiddleware.php";
 
     class UpdateStudentController {
         public function store() {
+            $user = AuthMiddleware::verifyToken();
             if ($_SERVER["REQUEST_METHOD"] === "PUT") {
                 $data = json_decode(file_get_contents("php://input"), true);
                 
                 // Vérification des données requises
-                if (!isset($data["id_etudiant"], $data["nom"], $data["postnom"], $data["matricule"], $data["promotion"], $data["annee_academique"])) {
+                if (!isset($data["id_etudiant"], $data["nom"], $data["postnom"], $data["prenom"], $data["email"], $data["matricule"], $data["promotion"], $data["annee_academique"])) {
                     echo json_encode(["message" => "Données incomplètes"]);
                     http_response_code(400);
                     exit();
@@ -18,6 +20,8 @@
                     $data["id_etudiant"],
                     $data["nom"],
                     $data["postnom"],
+                    $data["prenom"],
+                    $data["email"],
                     $data["matricule"],
                     $data["promotion"],
                     $data["annee_academique"]
