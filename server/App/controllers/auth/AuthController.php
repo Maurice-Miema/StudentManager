@@ -3,7 +3,6 @@
 
     class AuthController {
         private $authModel;
-
         public function __construct() {
             $this->authModel = new AuthModel();
         }

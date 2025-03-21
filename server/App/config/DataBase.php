@@ -1,10 +1,10 @@
 <?php
     class Database {
-        private $host = 'mainline.proxy.rlwy.net';    
+        private $host = 'shortline.proxy.rlwy.net';    
         private $db_name = 'railway'; 
         private $username = 'root';  
-        private $password = 'vKYMGeTzSMecHxEBLhelmUDFoApfjqRU';
-        private $port = '11295';
+        private $password = 'DWzrvjAquBWQcyyPJYhaEJoXQTJHtdfT';
+        private $port = '19469';
         public $conn;
 
         public function getConnection() {

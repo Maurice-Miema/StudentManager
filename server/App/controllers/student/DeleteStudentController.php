@@ -1,8 +1,10 @@
 <?php
     require_once __DIR__ . "/../../models/student/DeleteStudent.php";
+    require_once __DIR__ . "/../../middleware/AuthMiddleware.php";
 
     class DeleteStudentController {
         public function delete() {
+            $user = AuthMiddleware::verifyToken();
             // Vérification si les données sont envoyées en méthode PUT
             $data = json_decode(file_get_contents("php://input"));
             
