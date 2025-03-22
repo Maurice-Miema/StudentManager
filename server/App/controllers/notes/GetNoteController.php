@@ -3,7 +3,7 @@
 
     class GetNoteController {
         public function getNotesByStudent() {
-            if ($_SERVER["REQUEST_METHOD"] !== "GET") {
+            if ($_SERVER["REQUEST_METHOD"] === "GET") {
                 $data = json_decode(file_get_contents("php://input"), true);
 
                 if (!isset($data["id_etudiant"])) {
@@ -11,10 +11,10 @@
                     http_response_code(400);
                     exit();
                 }
-    
+
                 $note = new GetNote();
                 $result = $note->getNotesByStudent($data["id_etudiant"]);
-    
+
                 if (isset($result["error"])) {
                     echo json_encode(["message" => "Erreur de récupération", "error" => $result["error"]]);
                     http_response_code(500);
@@ -24,7 +24,6 @@
                 }
             }
 
-            
         }
     }
 ?>
