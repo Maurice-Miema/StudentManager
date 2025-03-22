@@ -3,7 +3,8 @@
 
     class GetNote {
         private $conn;
-        private $table = "notes";
+        private $table_note = "notes";  // Table des notes
+        private $table_cours = "cours"; // Table des cours
 
         public function __construct() {
             $database = new Database();
@@ -12,7 +13,17 @@
 
         public function getNotesByStudent($id_etudiant) {
             try {
-                $query = "SELECT id_cours, note_obtenue FROM " . $this->table . " WHERE id_etudiant = :id_etudiant";
+                // Joindre la table 'cours' à la table 'notes' sur 'id_cours'
+                $query = "
+                    SELECT 
+                        n.id_cours, 
+                        n.note_obtenue, 
+                        c.nom AS nom_cours
+                    FROM " . $this->table_note . " n
+                    JOIN " . $this->table_cours . " c ON n.id_cours = c.id_cours
+                    WHERE n.id_etudiant = :id_etudiant
+                ";
+
                 $stmt = $this->conn->prepare($query);
                 $stmt->bindParam(":id_etudiant", $id_etudiant);
                 $stmt->execute();

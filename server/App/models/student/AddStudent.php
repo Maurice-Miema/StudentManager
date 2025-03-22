@@ -47,6 +47,17 @@
                     throw new Exception("Échec de l'insertion de la promotion.");
                 }
 
+                $id_promotion = $this->conn->lastInsertId();
+
+                $query_etudiant = "INSERT INTO etudiant (id_utilisateur, id_promotion) VALUES (:id_utilisateur, :id_promotion)";
+                $stmt_promotion = $this->conn->prepare($query_etudiant);
+                $stmt_promotion->bindParam(":id_utilisateur", $id_etudiant);
+                $stmt_promotion->bindParam(":id_promotion", $id_promotion);
+
+                if(!$stmt_promotion->execute()) {
+                    throw new Exception("Échec de l'insertion de l'etudiant.");
+                }
+
                 // Valider la transaction
                 $this->conn->commit();
                 return true;
