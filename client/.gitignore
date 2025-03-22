@@ -1,0 +1,4 @@
+# Fichiers et dossiers à ignorer
+.vscode/
+.DS_Store
+.backups
