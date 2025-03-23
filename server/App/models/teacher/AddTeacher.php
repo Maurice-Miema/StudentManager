@@ -10,21 +10,23 @@
             $this->conn = $database->getConnection();
         }
 
-        public function addteacher($nom, $postnom, $matricule, $password, $role, $grade) {
+        public function addteacher($nom, $postnom, $prenom, $email, $matricule, $password, $role, $grade) {
             try {
                 // Démarrer une transaction
                 $this->conn->beginTransaction();
 
                 // Hacher le mot de passe
-                $hashed_password = password_hash($password, PASSWORD_BCRYPT);
+                $hashed_mot_de_passe = password_hash($password, PASSWORD_BCRYPT);
 
                 // Insérer le professeur
-                $query = "INSERT INTO " . $this->table . "(nom, post_nom, matricule, mot_de_passe, role) VALUES (:nom, :postnom, :matricule, :password, :role)";
+                $query = "INSERT INTO " . $this->table . "(nom, post_nom, prenom, email, matricule, mot_de_passe, role) VALUES (:nom, :postnom, :prenom, :email, :matricule, :password, :role)";
                 $stmt = $this->conn->prepare($query);
                 $stmt->bindParam(":nom", $nom);
                 $stmt->bindParam(":postnom", $postnom);
+                $stmt->bindParam(":prenom", $prenom);
+                $stmt->bindParam(":email", $email);
                 $stmt->bindParam(":matricule", $matricule);
-                $stmt->bindParam(":password", $hashed_password);
+                $stmt->bindParam(":password", $hashed_mot_de_passe);
                 $stmt->bindParam(":role", $role);
 
                 if (!$stmt->execute()) {

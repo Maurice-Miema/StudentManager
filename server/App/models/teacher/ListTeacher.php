@@ -11,7 +11,7 @@ class ListTeacher {
 
     public function getTeacher() {
         try {
-            $sql = "SELECT u.id_utilisateur, u.nom, u.post_nom, u.matricule, p.grade 
+            $sql = "SELECT u.id_utilisateur, u.nom, u.post_nom, u.prenom, u.email, u.matricule, p.grade 
                     FROM professeur p
                     JOIN utilisateur u ON p.id_utilisateur = u.id_utilisateur";
                     
