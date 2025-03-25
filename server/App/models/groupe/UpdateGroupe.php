@@ -1,7 +1,7 @@
 <?php
 require_once __DIR__ . "/../../config/DataBase.php";
 
-class AddGroupe {
+class UpdateGroupe {
     private $conn;
     private $table = "groupe";
 
@@ -10,7 +10,7 @@ class AddGroupe {
         $this->conn = $database->getConnection();
     }
 
-    public function addgroupe($nom_groupe, $nom_projet, $duree, $date_debut, $date_fin) {
+    public function updateGroupe($id_groupe, $nom_groupe, $nom_projet, $duree, $date_debut, $date_fin) {
         try {
             // Convertir les dates au format YYYY-MM-DD
             $date_debut_obj = DateTime::createFromFormat('d/m/Y', $date_debut);
@@ -25,11 +25,19 @@ class AddGroupe {
             $date_debut = $date_debut_obj->format('Y-m-d');
             $date_fin = $date_fin_obj->format('Y-m-d');
 
-            // Requête SQL
-            $query = "INSERT INTO " . $this->table . " (nom_groupe, nom_projet, duree, date_debut, date_fin) VALUES (:nom_groupe, :nom_projet, :duree, :date_debut, :date_fin)";
+            // Requête SQL pour mettre à jour un groupe
+            $query = "UPDATE " . $this->table . " 
+                      SET nom_groupe = :nom_groupe, 
+                          nom_projet = :nom_projet, 
+                          duree = :duree, 
+                          date_debut = :date_debut, 
+                          date_fin = :date_fin 
+                      WHERE id_groupe = :id_groupe";
+
             $stmt = $this->conn->prepare($query);
 
             // Liaison des paramètres
+            $stmt->bindParam(":id_groupe", $id_groupe);
             $stmt->bindParam(":nom_groupe", $nom_groupe);
             $stmt->bindParam(":nom_projet", $nom_projet);
             $stmt->bindParam(":duree", $duree);
@@ -38,7 +46,7 @@ class AddGroupe {
 
             // Exécution de la requête
             if (!$stmt->execute()) {
-                throw new Exception("Échec de l'insertion du groupe.");
+                throw new Exception("Échec de la mise à jour du groupe.");
             }
 
             return true;
