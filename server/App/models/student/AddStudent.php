@@ -23,7 +23,7 @@
                 $stmt = $this->conn->prepare($query);
                 $stmt->bindParam(":nom", $nom);
                 $stmt->bindParam(":postnom", $postnom);
-                $stmt->bindParam(":prenom", $postnom);
+                $stmt->bindParam(":prenom", $prenom);
                 $stmt->bindParam(":email", $email);
                 $stmt->bindParam(":matricule", $matricule);
                 $stmt->bindParam(":password", $hashed_password);
@@ -49,13 +49,14 @@
 
                 $id_promotion = $this->conn->lastInsertId();
 
+                // Insérer dans la table etudiant
                 $query_etudiant = "INSERT INTO etudiant (id_utilisateur, id_promotion) VALUES (:id_utilisateur, :id_promotion)";
-                $stmt_promotion = $this->conn->prepare($query_etudiant);
-                $stmt_promotion->bindParam(":id_utilisateur", $id_etudiant);
-                $stmt_promotion->bindParam(":id_promotion", $id_promotion);
+                $stmt_etudiant = $this->conn->prepare($query_etudiant);
+                $stmt_etudiant->bindParam(":id_utilisateur", $id_etudiant);
+                $stmt_etudiant->bindParam(":id_promotion", $id_promotion);
 
-                if(!$stmt_promotion->execute()) {
-                    throw new Exception("Échec de l'insertion de l'etudiant.");
+                if(!$stmt_etudiant->execute()) {
+                    throw new Exception("Échec de l'insertion de l'étudiant dans la table etudiant.");
                 }
 
                 // Valider la transaction
@@ -70,4 +71,3 @@
         }
     }
 ?>
-

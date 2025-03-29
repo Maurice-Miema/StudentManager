@@ -7,7 +7,7 @@
                 $data = json_decode(file_get_contents("php://input"), true);
                 
                 // Vérification des données requises
-                if (!isset($data["id_professeur"], $data["nom"], $data["postnom"], $data["matricule"], $data["grade"])) {
+                if (!isset($data["id_professeur"], $data["nom"], $data["postnom"], $data["prenom"], $data["email"], $data["matricule"], $data["grade"])) {
                     echo json_encode(["message" => "Données incomplètes"]);
                     http_response_code(400);
                     exit();
@@ -18,6 +18,8 @@
                     $data["id_professeur"],
                     $data["nom"],
                     $data["postnom"],
+                    $data["prenom"],
+                    $data["email"],
                     $data["matricule"],
                     $data["grade"]
                 );

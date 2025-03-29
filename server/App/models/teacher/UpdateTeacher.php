@@ -11,7 +11,7 @@
             $this->conn = $database->getConnection();
         }
 
-        public function updateTeacher($id_professeur, $nom, $postnom, $matricule, $grade) {
+        public function updateTeacher($id_professeur, $nom, $postnom, $prenom, $email, $matricule, $grade) {
             try {
                 // Vérifier si l'ID du professeur existe
                 $query_check_id = "SELECT id_utilisateur FROM " . $this->table_utilisateur . " WHERE id_utilisateur = :id_professeur";
@@ -38,12 +38,14 @@
 
                 // Mise à jour des informations dans la table utilisateur
                 $query_utilisateur = "UPDATE " . $this->table_utilisateur . " 
-                                    SET nom = :nom, post_nom = :postnom, matricule = :matricule
+                                    SET nom = :nom, post_nom = :postnom, prenom = :prenom, email= :email, matricule = :matricule
                                     WHERE id_utilisateur = :id_professeur";
 
                 $stmt_utilisateur = $this->conn->prepare($query_utilisateur);
                 $stmt_utilisateur->bindParam(":nom", $nom);
                 $stmt_utilisateur->bindParam(":postnom", $postnom);
+                $stmt_utilisateur->bindParam(":prenom", $prenom);
+                $stmt_utilisateur->bindParam(":email", $email);
                 $stmt_utilisateur->bindParam(":matricule", $matricule);
                 $stmt_utilisateur->bindParam(":id_professeur", $id_professeur);
 
@@ -54,7 +56,6 @@
                 // Valider la transaction
                 $this->conn->commit();
                 return true;
-              
 
             } catch (Exception $e) {
                 // Annuler la transaction en cas d'erreur

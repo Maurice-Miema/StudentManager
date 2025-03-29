@@ -2,7 +2,7 @@
     require_once __DIR__ . "/../../models/student/UpdateStudent.php";
     require_once __DIR__ . "/../../middleware/AuthMiddleware.php";
 
-    class UpdateStudentController {
+    class UpdateStudent {
         public function store() {
             $user = AuthMiddleware::verifyToken();
             if ($_SERVER["REQUEST_METHOD"] === "PUT") {
