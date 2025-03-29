@@ -1,69 +1,67 @@
 <?php
-require_once __DIR__ . "/../../config/DataBase.php";
+    require_once __DIR__ . "/../../config/DataBase.php";
 
-class UpdateTeacher {
-    private $conn;
-    private $table_utilisateur = "utilisateur";
-    private $table_professeur = "professeur";
+    class UpdateTeacher {
+        private $conn;
+        private $table_utilisateur = "utilisateur";
+        private $table_professeur = "professeur";
 
-    public function __construct() {
-        $database = new Database();
-        $this->conn = $database->getConnection();
-    }
+        public function __construct() {
+            $database = new Database();
+            $this->conn = $database->getConnection();
+        }
 
-    public function updateTeacher($id_professeur, $nom, $postnom, $prenom, $email, $matricule, $grade) {
-        try {
-            // Vérifier si l'ID du professeur existe
-            $query_check_id = "SELECT id_utilisateur FROM " . $this->table_utilisateur . " WHERE id_utilisateur = :id_professeur";
-            $stmt_check_id = $this->conn->prepare($query_check_id);
-            $stmt_check_id->bindParam(":id_professeur", $id_professeur);
-            $stmt_check_id->execute();
+        public function updateTeacher($id_professeur, $nom, $postnom, $prenom, $email, $matricule, $grade) {
+            try {
+                // Vérifier si l'ID du professeur existe
+                $query_check_id = "SELECT id_utilisateur FROM " . $this->table_utilisateur . " WHERE id_utilisateur = :id_professeur";
+                $stmt_check_id = $this->conn->prepare($query_check_id);
+                $stmt_check_id->bindParam(":id_professeur", $id_professeur);
+                $stmt_check_id->execute();
 
-            if ($stmt_check_id->fetchColumn() === false) {
-                return ["error" => "Le professeur avec cet ID n'existe pas dans la base de données."];
-            }
+                if ($stmt_check_id->fetchColumn() === false) {
+                    return ["error" => "Le professeur avec cet ID n'existe pas dans la base de données."];
+                }
 
-            // Démarrer une transaction
-            $this->conn->beginTransaction();
+                // Démarrer une transaction
+                $this->conn->beginTransaction();
 
-            // Mise à jour des informations dans la table professeur
-            $query_professeur = "UPDATE " . $this->table_professeur . " SET grade = :grade WHERE id_utilisateur = :id_professeur";
-            $stmt_professeur = $this->conn->prepare($query_professeur);
-            $stmt_professeur->bindParam(":grade", $grade);
-            $stmt_professeur->bindParam(":id_professeur", $id_professeur);
+                // Mise à jour des informations dans la table professeur
+                $query_professeur = "UPDATE " . $this->table_professeur . " SET grade = :grade WHERE id_utilisateur = :id_professeur";
+                $stmt_professeur = $this->conn->prepare($query_professeur);
+                $stmt_professeur->bindParam(":grade", $grade);
+                $stmt_professeur->bindParam(":id_professeur", $id_professeur);
 
-            if (!$stmt_professeur->execute()) {
-                throw new Exception("Échec de la mise à jour du professeur");
-            }
+                if (!$stmt_professeur->execute()) {
+                    throw new Exception("Échec de la mise à jour des informations du professeur dans la table professeur");
+                }
 
-            // Mise à jour des informations dans la table utilisateur
-            $query_utilisateur = "UPDATE " . $this->table_utilisateur . " 
-                SET nom = :nom, post_nom = :postnom, prenom = :prenom, email = :email, matricule = :matricule 
-                WHERE id_utilisateur = :id_professeur";
-            $stmt_utilisateur = $this->conn->prepare($query_utilisateur);
-            $stmt_utilisateur->bindParam(":id_professeur", $id_professeur);
-            $stmt_utilisateur->bindParam(":nom", $nom);
-            $stmt_utilisateur->bindParam(":postnom", $postnom);
-            $stmt_utilisateur->bindParam(":prenom", $prenom);
-            $stmt_utilisateur->bindParam(":email", $email);
-            $stmt_utilisateur->bindParam(":matricule", $matricule);
+                // Mise à jour des informations dans la table utilisateur
+                $query_utilisateur = "UPDATE " . $this->table_utilisateur . " 
+                                    SET nom = :nom, post_nom = :postnom, prenom = :prenom, email= :email, matricule = :matricule
+                                    WHERE id_utilisateur = :id_professeur";
 
-            if (!$stmt_utilisateur->execute()) {
-                throw new Exception("Échec de la mise à jour des informations utilisateur");
-            }
+                $stmt_utilisateur = $this->conn->prepare($query_utilisateur);
+                $stmt_utilisateur->bindParam(":nom", $nom);
+                $stmt_utilisateur->bindParam(":postnom", $postnom);
+                $stmt_utilisateur->bindParam(":prenom", $prenom);
+                $stmt_utilisateur->bindParam(":email", $email);
+                $stmt_utilisateur->bindParam(":matricule", $matricule);
+                $stmt_utilisateur->bindParam(":id_professeur", $id_professeur);
 
-            // Valider la transaction
-            $this->conn->commit();
-            return ["success" => "Mise à jour réussie"];
+                if (!$stmt_utilisateur->execute()) {
+                    throw new Exception("Échec de la mise à jour des informations du professeur dans la table utilisateur");
+                }
 
-        } catch (Exception $e) {
-            // Annuler la transaction en cas d'erreur
-            if ($this->conn->inTransaction()) {
+                // Valider la transaction
+                $this->conn->commit();
+                return true;
+
+            } catch (Exception $e) {
+                // Annuler la transaction en cas d'erreur
                 $this->conn->rollBack();
+                return ["error" => $e->getMessage()];
             }
-            // Retourner un message d'erreur plus détaillé
-            return ["error" => $e->getMessage(), "details" => $e->getTraceAsString()];
         }
     }
-}
 ?>

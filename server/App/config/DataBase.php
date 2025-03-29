@@ -1,12 +1,12 @@
 <?php
     class Database {
-        private $host = 'localhost';    
+        private $host = '127.0.0.1';    
         private $db_name = 'gestion_universite'; 
         private $username = 'root';  
         private $password = '';
-        private $port = '3306';
+        private $port = '';
         public $conn;
-
+        
         public function getConnection() {
             $this->conn = null;
             try {
@@ -16,7 +16,6 @@
                     PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
                     PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC
                 ]);
-                echo "✅ Connexion réussie!";
             } catch (PDOException $exception) {
                 echo "❌ Erreur de connexion: " . $exception->getMessage();
             }
