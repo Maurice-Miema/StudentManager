@@ -6,17 +6,17 @@
             if ($_SERVER["REQUEST_METHOD"] === "POST") {
                 $data = json_decode(file_get_contents("php://input"), true);
 
-                if(!isset($data["nom_groupe"], $data["nom_projet"])){
+                if(!isset($data["nom_groupe"], $data["nom_projet"], $data["duree"], $data["date_debut"], $data["date_fin"])){
                     echo json_encode(["message" => "Données incomplètes"]);
                     http_response_code(400);
                     exit();
                 }
 
                 $note = new AddGroupe();
-                $result = $note->addgroupe( $data["nom_groupe"], $data["nom_projet"]);
+                $result = $note->addgroupe( $data["nom_groupe"], $data["nom_projet"], $data["duree"], $data["date_debut"], $data["date_fin"]);
 
                 if ($result === true) {
-                    echo json_encode(["message" => "Le groupe Ajouter avec succès"]);
+                    echo json_encode(["message" => "Le groupe Ajouté avec succès"]);
                     http_response_code(200);
                 }else{
                     echo json_encode(["message" => "Échec de l'ajout", "error" => $result["error"]]);
